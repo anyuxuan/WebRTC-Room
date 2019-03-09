@@ -1,1 +1,8 @@
-.room {}
+.videoContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.videoContainer > div + div {
+  margin-left: 20px;
+}
