@@ -1,4 +1,5 @@
 import { Client, ClientProps } from './Client';
+import { detectRTC } from './utils';
 
 export interface SDKConfig {
   mode: 'live';
@@ -7,17 +8,15 @@ export interface SDKConfig {
 
 const WebRTCSDK = {
   VERSION: '0.0.1',
-  detectRTC() {
-    console.log('detect RTC');
-  },
+  detectRTC,
   createClient(config: SDKConfig): ClientProps {
     return new Client(config);
   },
   createStream(spec: any): any {
 
   },
-  getDevices(success, error): any[] {
-    return [];
+  getDevices(success, error): void {
+    return;
   },
 };
 
