@@ -4,8 +4,10 @@ export interface ClientProps {
 }
 
 class Client implements ClientProps {
-  constructor(config: SDKConfig) {
+  private config: SDKConfig;
 
+  constructor(config: SDKConfig) {
+    this.config = config;
   }
 }
 
