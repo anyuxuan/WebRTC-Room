@@ -35,6 +35,10 @@ export function isOpera(): boolean {
   return uaResult.browser.name === 'Opera';
 }
 
+export function isWeChat(): boolean {
+  return uaResult.browser.name === 'WeChat';
+}
+
 export function getBrowserVersion(): number {
   const version = uaResult.browser.version;
   const REG = /\d+/g;
