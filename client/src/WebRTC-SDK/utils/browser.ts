@@ -1,5 +1,10 @@
 import { UAParser } from 'ua-parser-js';
 
+interface OSInfo {
+  name: string;
+  version: string;
+}
+
 const uaParser = new UAParser();
 const uaResult = uaParser.getResult();
 
@@ -38,4 +43,8 @@ export function getBrowserVersion(): number {
     return -1;
   }
   return majorVersion;
+}
+
+export function getOS(): OSInfo {
+  return uaResult.os;
 }
