@@ -1,3 +1,8 @@
+import { UAParser } from 'ua-parser-js';
+
+const uaParser = new UAParser();
+const uaResult = uaParser.getResult();
+
 export function detectRTC(): boolean {
   let isSupport = false;
   // @ts-ignore
@@ -7,4 +12,30 @@ export function detectRTC(): boolean {
   // @ts-ignore
   const hasWebSocket = !!window.WebSocket;
   return isSupport && pc && hasRTCApi && hasWebSocket;
+}
+
+export function isChrome(): boolean {
+  return uaResult.browser.name === 'Chrome';
+}
+
+export function isSafari(): boolean {
+  return uaResult.browser.name === 'Safari';
+}
+
+export function isFirefox(): boolean {
+  return uaResult.browser.name === 'Firefox';
+}
+
+export function isOpera(): boolean {
+  return uaResult.browser.name === 'Opera';
+}
+
+export function getBrowserVersion(): number {
+  const version = uaResult.browser.version;
+  const REG = /\d+/g;
+  const majorVersion = +version.match(REG)[0];
+  if (Number.isNaN(majorVersion)) {
+    return -1;
+  }
+  return majorVersion;
 }
