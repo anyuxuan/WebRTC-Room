@@ -1,5 +1,5 @@
 import { Client, ClientProps } from './Client';
-import { detectRTC } from './utils';
+import { detectRTC } from './helpers';
 
 export interface SDKConfig {
   mode: 'live';
