@@ -1,8 +1,10 @@
 import React from 'react';
-import LocalVideo from '../Video/LocalVideo';
-import RemoteVideo from '../Video/RemoteVideo';
+import { connect } from 'dva';
+import LocalVideo from '@/pages/Video/LocalVideo';
+import RemoteVideo from '@/pages/Video/RemoteVideo';
 import styles from './Room.scss';
 
+@connect(({ global }) => ({ global }))
 class Room extends React.Component {
   render() {
     return (

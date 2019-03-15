@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'dva';
 import styles from './BasicLayout.scss';
 
 export type BasicLayoutComponent<P> = React.SFC<P>;
@@ -16,4 +17,4 @@ const BasicLayout: BasicLayoutComponent<BasicLayoutProps> = props => {
   );
 };
 
-export default BasicLayout;
+export default connect(props => props)(BasicLayout);
