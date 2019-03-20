@@ -13,8 +13,8 @@ export interface VideoPlayerOptions {
 
 class VideoPlayer implements VideoPlayerProps {
   private readonly options: VideoPlayerOptions;
-  private div: HTMLElement;
-  private video: HTMLElement;
+  private div: HTMLDivElement;
+  private video: HTMLVideoElement;
 
   constructor(options) {
     this.options = options;
