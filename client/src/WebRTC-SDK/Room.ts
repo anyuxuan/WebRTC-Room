@@ -5,7 +5,8 @@ export interface RoomParams {
 }
 
 export interface RoomProps {
-
+  connect(): void;
+  disconnect(): void;
 }
 
 class Room implements RoomProps {
@@ -13,6 +14,14 @@ class Room implements RoomProps {
 
   constructor(params) {
     this.roomParams = params;
+  }
+
+  connect(): void {
+
+  }
+
+  disconnect(): void {
+
   }
 }
 
