@@ -1,0 +1,24 @@
+{
+  "name": "media-server",
+  "private": true,
+  "version": "0.0.1",
+  "description": "A media server for live",
+  "author": "anyuxuan",
+  "scripts": {
+    "start": "npm run build && npm run watch",
+    "watch": "pm2 start ./app/app.js --watch",
+    "build": "npx babel src --out-dir app"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.4.0",
+    "koa": "^2.7.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.4.0",
+    "@babel/plugin-transform-runtime": "^7.4.0",
+    "@babel/preset-env": "^7.4.1",
+    "eslint": "^5.15.3",
+    "pm2": "^3.4.0"
+  }
+}
