@@ -1,3 +1,4 @@
-export default {
-  port: 3000
-}
+export const config = {
+  PORT: 3000,
+};
+

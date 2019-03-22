@@ -1,3 +1,1 @@
-const config = {};
-
-export { config };
+export * from './config.default';
