@@ -6,6 +6,7 @@
   "author": "anyuxuan",
   "scripts": {
     "start": "npx nodemon --watch src --exec babel-watch src/app.js",
+    "prebuild": "rimraf app",
     "build": "npx babel src --out-dir app --retain-lines --source-maps",
     "deploy": "npm run build && npx pm2 start app/app.js"
   },
@@ -25,6 +26,7 @@
     "babel-watch": "^7.0.0",
     "eslint": "^5.15.3",
     "nodemon": "^1.18.10",
-    "pm2": "^3.4.0"
+    "pm2": "^3.4.0",
+    "rimraf": "^2.6.3"
   }
 }
