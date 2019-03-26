@@ -1,10 +1,17 @@
 import http from 'http';
-import socketIO from 'socket.io';
 import Koa from 'koa';
 import koaBody from 'koa-body';
-import logger from 'koa-logger';
+import koaLogger from 'koa-logger';
 import { config } from './config';
+// routes
 import authRouter from './routes/auth';
+// middleWares
+import { success } from './middlewares/success';
+
+// utils
+import { logger } from './utils/logger';
+// socket
+import { socketStarter } from './socket';
 
 const app = new Koa();
 
@@ -18,32 +25,24 @@ function ignoreAssets(middleWare) {
   };
 }
 
+app.use(success());
+
 app.use(koaBody());
 
-app.use(ignoreAssets(logger()));
+app.use(ignoreAssets(koaLogger()));
 
 app.use(authRouter.routes());
 
 const server = http.createServer(app.callback());
 
-const io = socketIO(server);
-
 server.on('listening', () => {
-  console.log('App is listening on port: %d', config.PORT);
+  logger.info('App is listening on port: %d', config.PORT);
 });
 
 server.on('error', (err) => {
-  console.log(err);
-});
-
-io.on('connection', (socket) => {
-  console.log('A user connected');
-  socket.on('event', (data) => {
-    console.log('event: ', data);
-  });
-  socket.on('disconnect', () => {
-    console.log('disconnect');
-  });
+  logger.info(err);
 });
 
 server.listen(config.PORT);
+
+socketStarter(server);
