@@ -5,7 +5,7 @@ export function fail() {
         success: false,
         code: 500,
         data: null,
-        msg
+        msg: msg && msg.message || msg,
       };
     };
     await next();

@@ -7,6 +7,7 @@ import { config } from './config';
 import authRouter from './routes/auth';
 // middleWares
 import { success } from './middlewares/success';
+import { fail } from './middlewares/fail';
 
 // utils
 import { logger } from './utils/logger';
@@ -25,13 +26,12 @@ function ignoreAssets(middleWare) {
   };
 }
 
-app.use(success());
-
-app.use(koaBody());
-
-app.use(ignoreAssets(koaLogger()));
-
-app.use(authRouter.routes());
+app
+  .use(success())
+  .use(fail())
+  .use(koaBody())
+  .use(ignoreAssets(koaLogger()))
+  .use(authRouter.routes());
 
 const server = http.createServer(app.callback());
 
