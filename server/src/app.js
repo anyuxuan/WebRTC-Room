@@ -4,7 +4,7 @@ import koaBody from 'koa-body';
 import koaLogger from 'koa-logger';
 import { config } from './config';
 // routes
-import authRouter from './routes/auth';
+import routers from './routes';
 // middleWares
 import { success } from './middlewares/success';
 import { fail } from './middlewares/fail';
@@ -31,7 +31,7 @@ app
   .use(fail())
   .use(koaBody())
   .use(ignoreAssets(koaLogger()))
-  .use(authRouter.routes());
+  .use(routers.routes());
 
 const server = http.createServer(app.callback());
 
