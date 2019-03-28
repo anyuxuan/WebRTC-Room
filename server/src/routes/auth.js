@@ -10,7 +10,12 @@ router.post('/create_token', async (ctx, next) => {
       ctx.response.fail(400, 'userName is required');
       return;
     }
-    ctx.response.success({ token: '123' });
+    if (!roomId) {
+      ctx.response.fail(400, 'roomId is required');
+      return;
+    }
+    const token = md5(userName, roomId);
+    ctx.response.success({ token });
     await next();
   } catch (err) {
     await next(err);
