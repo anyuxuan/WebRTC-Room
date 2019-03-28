@@ -1,8 +1,8 @@
 export function fail() {
   return async function(ctx, next) {
-    ctx.response.fail = function(msg, code = 500) {
+    ctx.response.fail = function(code = 500, msg = 'Error occurred') {
       ctx.status = code;
-      return {
+      ctx.body = {
         success: false,
         code,
         data: null,

@@ -12,10 +12,12 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.4.0",
+    "blueimp-md5": "^2.10.0",
     "koa": "^2.7.0",
     "koa-body": "^4.1.0",
     "koa-logger": "^3.2.0",
     "koa-router": "^7.4.0",
+    "koa-session": "^5.10.1",
     "socket.io": "^2.2.0"
   },
   "devDependencies": {
