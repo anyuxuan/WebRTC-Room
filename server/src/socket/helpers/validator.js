@@ -11,9 +11,10 @@ export function isTokenValid(token) {
   const result = {
     isValid: false,
     errMsg: '',
+    decoded: {}
   };
   try {
-    jwt.verify(token, config.PRIVATE_KEY);
+    result.decoded = jwt.verify(token, config.PRIVATE_KEY);
     result.isValid = true;
   } catch (err) {
     result.errMsg = TOKEN_ERR_MSG[err.name] || 'Authentication error';
