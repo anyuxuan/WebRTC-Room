@@ -19,19 +19,19 @@ function socketStarter(server) {
   
   io.on('connection', (socket) => {
     logger.info('A user connected');
-    socket.join(payload.roomId, () => {
-      const { rooms } = socket;
-      logger.info(rooms);
-      io.to(payload.roomId).emit('A new user entered the room');
-    });
-    socket.on('event', (data) => {
-      logger.info('event: ', data);
-    });
     socket.on('disconnect', () => {
       logger.info('disconnect');
+      socket.broadcast.emit('quit', {
+        userName: payload.userName
+      });
     });
     socket.on('error', (err) => {
       logger.info('error: ', err);
+    });
+    socket.broadcast.emit('join', {
+      appId: payload.appId,
+      userName: payload.userName,
+      roomId: payload.roomId
     });
   });
 }
