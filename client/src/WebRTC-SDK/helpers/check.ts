@@ -1,4 +1,4 @@
-import { isChrome, getBrowserVersion, isFirefox, isOpera, isSafari } from '../utils';
+import { isChrome, getBrowserVersion, isFirefox, isOpera, isSafari } from '@/WebRTC-SDK/utils';
 
 export function detectRTC(): boolean {
   let isSupport = false;

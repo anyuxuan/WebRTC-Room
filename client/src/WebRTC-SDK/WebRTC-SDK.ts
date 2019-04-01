@@ -1,5 +1,5 @@
-import { Client, ClientProps } from './Client';
-import { detectRTC, genErrorFunction } from './helpers';
+import { Client, ClientProps } from '@/WebRTC-SDK/Client';
+import { detectRTC, genErrorFunction } from '@/WebRTC-SDK/helpers';
 import { Stream, StreamProps, StreamSpec } from '@/WebRTC-SDK/Stream';
 
 export interface SDKConfig {
