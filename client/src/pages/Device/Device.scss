@@ -1,0 +1,22 @@
+.deviceContainer {
+  width: 100%;
+}
+
+.deviceListContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.deviceList + .deviceList {
+  margin-left: 20px;
+}
+
+.deviceControl {
+  display: flex;
+  justify-content: center;
+  margin-top: 24px;
+}
+
+.button + .button {
+  margin-left: 20px;
+}

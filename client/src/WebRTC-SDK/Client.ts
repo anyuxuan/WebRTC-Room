@@ -1,10 +1,10 @@
-import { SDKConfig } from '@/WebRTC-SDK/WebRTC-SDK';
+import { Callback, SDKConfig } from '@/WebRTC-SDK/WebRTC-SDK';
 import { isString, isFunction } from '@/WebRTC-SDK/utils/value-check';
 import { Logger } from '@/WebRTC-SDK/Logger';
 import { Room, RoomParams, RoomProps } from '@/WebRTC-SDK/Room';
 
 export interface ClientProps {
-  initCore(appId: string, callback: (err?: Error, data?: any) => void): void;
+  initCore(appId: string, callback: Callback<Error, any, void>): void;
   initRoom(roomParams: RoomParams): RoomProps;
 }
 
@@ -16,7 +16,7 @@ class Client implements ClientProps {
     this.config = config;
   }
   
-  initCore(appId: string, callback: (err?: Error, data?: any) => void): void {
+  initCore(appId: string, callback: Callback<Error, any, void>): void {
     if (!appId || !isString(appId)) {
       callback(new TypeError(`Param appId is required and must be a string`));
       return;

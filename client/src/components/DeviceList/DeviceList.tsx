@@ -57,7 +57,7 @@ function DeviceList(props: DeviceListProps) {
         {deviceList
           .filter(device => {
             if (type === DeviceType.ALL) {
-              return device;
+              return true;
             }
             return device.kind === type;
           })
