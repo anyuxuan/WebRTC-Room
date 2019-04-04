@@ -4,9 +4,9 @@ import { Spin } from 'antd';
 function Loading() {
   return (
     <Fragment>
-      <Spin className="globalSpin" size="large" />
+      <Spin className="globalSpin" size="large"/>
     </Fragment>
-  )
+  );
 }
 
 export default Loading;
