@@ -1,10 +1,10 @@
-import { genErrorFunction } from '@/WebRTC-SDK/helpers';
 import { VideoPlayer, VideoPlayerOptions, VideoPlayerProps } from '@/WebRTC-SDK/views/VideoPlayer';
 import { AudioPlayer, AudioPlayerOptions, AudioPlayerProps } from '@/WebRTC-SDK/views/AudioPlayer';
+import { Callback } from '@/WebRTC-SDK/WebRTC-SDK';
 
 export interface StreamProps {
   init(): void;
-  play(elementId: string, success: () => void, fail: (err: Error) => void): void;
+  play(elementId: string, callback: Callback<Error, any, void>): void;
   getAttributes(): void;
   getId(): string;
   hasVideo(): boolean;
@@ -34,21 +34,20 @@ class Stream implements StreamProps {
   private player: VideoPlayerProps | AudioPlayerProps;
   private elementId: string;
   private stream: MediaStream;
-
+  
   constructor(spec) {
     this.spec = spec;
     this.video = spec.video;
     this.audio = spec.audio;
   }
-
+  
   init() {
-
+  
   }
-
-  play(elementId: string, success: () => void, fail: (err: Error) => void): void {
-    const errCallback = genErrorFunction(fail);
+  
+  play(elementId: string, callback: Callback<Error, any, void>): void {
     if (!elementId) {
-      errCallback(new TypeError('Param elementId is required and must be a string'));
+      callback(new TypeError('Param elementId is required and must be a string'));
       return;
     }
     this.elementId = elementId;
@@ -65,34 +64,39 @@ class Stream implements StreamProps {
       };
       this.player = new AudioPlayer(options);
     }
-    this.player.play(success, fail);
+    this.player.play(callback);
   }
-
-  getAttributes(): void {}
-
+  
+  getAttributes(): void {
+  }
+  
   getId(): string {
     return this.spec.streamId;
   }
-
+  
   hasVideo(): boolean {
     return !!this.spec.video;
   }
-
+  
   hasAudio(): boolean {
     return !!this.spec.audio;
   }
-
+  
   hasMedia(): boolean {
     return !!this.spec.video || !!this.spec.audio;
   }
-
-  muteVideo(): void {}
-
-  unmuteVideo(): void {}
-
-  muteAudio(): void {}
-
-  unmuteAudio(): void {}
+  
+  muteVideo(): void {
+  }
+  
+  unmuteVideo(): void {
+  }
+  
+  muteAudio(): void {
+  }
+  
+  unmuteAudio(): void {
+  }
 }
 
 export { Stream };

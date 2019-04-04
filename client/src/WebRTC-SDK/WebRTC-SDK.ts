@@ -1,6 +1,8 @@
 import { Client, ClientProps } from '@/WebRTC-SDK/Client';
-import { detectRTC, genErrorFunction } from '@/WebRTC-SDK/helpers';
+import { detectRTC } from '@/WebRTC-SDK/helpers';
 import { Stream, StreamProps, StreamSpec } from '@/WebRTC-SDK/Stream';
+
+export type Callback<T, U, R> = (err?: T, data?: U) => R;
 
 export interface SDKConfig {
   mode: 'live';
@@ -12,7 +14,7 @@ interface WebRTCSDKProps {
   detectRTC(): boolean;
   createClient(config: SDKConfig): ClientProps;
   createStream(spec: StreamSpec): StreamProps;
-  getDevices(success: (devices: MediaDeviceInfo[]) => void, fail: (err: Error) => void): void;
+  getDevices(callback: Callback<Error, MediaDeviceInfo[], void>): Promise<void>;
 }
 
 const WebRTCSDK: WebRTCSDKProps = {
@@ -24,13 +26,17 @@ const WebRTCSDK: WebRTCSDKProps = {
   createStream(spec: StreamSpec): StreamProps {
     return new Stream(spec);
   },
-  getDevices(success: (devices: MediaDeviceInfo[]) => void, fail: (err: Error) => void): void {
-    const errCallback = genErrorFunction(fail);
+  async getDevices(callback: Callback<Error, MediaDeviceInfo[], void>): Promise<void> {
     if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
-      errCallback(new Error('Your browser does not support enumerateDevices function'));
+      callback(new Error('Your browser does not support enumerateDevices function'));
       return;
     }
-    navigator.mediaDevices.enumerateDevices().then(success).catch(errCallback);
+    try {
+      const devices = await navigator.mediaDevices.enumerateDevices();
+      callback(null, devices);
+    } catch (err) {
+      callback(err);
+    }
   },
 };
 

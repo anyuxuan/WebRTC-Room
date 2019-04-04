@@ -1,6 +1,6 @@
 import { isPlainObject, isString } from '@/WebRTC-SDK/utils/value-check';
 import { Logger } from '@/WebRTC-SDK/Logger';
-import { genErrorFunction } from '@/WebRTC-SDK/helpers';
+import { Callback } from '@/WebRTC-SDK/WebRTC-SDK';
 
 export interface RoomParams {
   userId: string;
@@ -9,64 +9,62 @@ export interface RoomParams {
 }
 
 export interface RoomProps {
-  enter(roomParams: RoomParams, success: () => void, fail: (err: Error) => void): void;
-  leave(userId: string, success: () => void, fail: (err: Error) => void): void;
-  publish(stream: any, success: () => void, fail: (err: Error) => void): void;
-  unpublish(stream: any, success: () => void, fail: (err: Error) => void): void;
+  enter(roomParams: RoomParams, callback: Callback<Error, string, void>): void;
+  leave(userId: string, callback: Callback<Error, string, void>): void;
+  publish(stream: any, callback: Callback<Error, any, void>): void;
+  unpublish(stream: any, callback: Callback<Error, any, void>): void;
 }
 
 class Room implements RoomProps {
   private roomParams;
   private isEntered = false;
-
+  
   constructor(params) {
     this.roomParams = params;
   }
-
-  enter(roomParams: RoomParams, success: () => void, fail: (err: Error) => void): void {
-    const errCallback = genErrorFunction(fail);
+  
+  enter(roomParams: RoomParams, callback: Callback<Error, string, void>): void {
     if (!roomParams) {
-      errCallback(new TypeError('Param roomParams is required and must be an object'));
+      callback(new TypeError('Param roomParams is required and must be an object'));
       return;
     }
     const { userId, roomId, sig } = roomParams;
     if (!userId || !isString(userId)) {
-      errCallback(new TypeError('Param userId is required and must be a string'));
+      callback(new TypeError('Param userId is required and must be a string'));
       return;
     }
     if (!roomId || !isString(roomId)) {
-      errCallback(new TypeError('Param roomId is required and must be a string'));
+      callback(new TypeError('Param roomId is required and must be a string'));
       return;
     }
     if (!sig || !isString(sig)) {
-      errCallback(new TypeError('Param sig is required and must be a string'));
+      callback(new TypeError('Param sig is required and must be a string'));
       return;
     }
     this.isEntered = true;
+    callback(null, userId);
     Logger.info('enterRoom success');
   }
-
-  leave(userId: string, success: () => void, fail: (err: Error) => void): void {
-    const errCallback = genErrorFunction(fail);
+  
+  leave(userId: string, callback: Callback<Error, string, void>): void {
     if (!this.isEntered) {
-      errCallback(new Error(`User ${userId} has not entered the room yet`));
+      callback(new Error(`User ${userId} has not entered the room yet`));
       return;
     }
+    callback(null, userId);
     Logger.info('leaveRoom success');
   }
-
-  publish(stream: any, success: () => void, fail: (err: Error) => void): void {
-    const errCallback = genErrorFunction(fail);
+  
+  publish(stream: any, callback: Callback<Error, any, void>): void {
     if (!isPlainObject(stream)) {
-      errCallback(new TypeError('Param stream is required and must be an object'));
+      callback(new TypeError('Param stream is required and must be an object'));
       return;
     }
   }
-
-  unpublish(stream: any, success: () => void, fail: (err: Error) => void): void {
-    const errCallback = genErrorFunction(fail);
+  
+  unpublish(stream: any, callback: Callback<Error, any, void>): void {
     if (!isPlainObject(stream)) {
-      errCallback(new TypeError('Param stream is required and must be an object'));
+      callback(new TypeError('Param stream is required and must be an object'));
       return;
     }
   }

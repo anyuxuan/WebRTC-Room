@@ -4,12 +4,10 @@ export default {
     devices: [],
   },
   effects: {
-    * getDevices(_, { select, put }) {
+    * getDevices(_, { select, put, cps }) {
       try {
         const sdk = yield select(state => state.global.WebRTCSDK);
-        const devices: MediaDeviceInfo[] = yield new Promise((resolve, reject) => {
-          sdk.getDevices(resolve, reject);
-        });
+        const devices = yield cps(sdk.getDevices);
         yield put({
           type: 'saveDevices',
           devices,
@@ -20,7 +18,7 @@ export default {
     },
   },
   reducers: {
-    saveDevices(state, devices) {
+    saveDevices(state, { devices }) {
       return {
         ...state,
         devices,

@@ -1,5 +1,7 @@
+import { Callback } from '@/WebRTC-SDK';
+
 export interface AudioPlayerProps {
-  play(success: () => void, fail: (err: Error) => void): void;
+  play(callback: Callback<Error, any, void>): void;
   destroy(): void;
 }
 
@@ -10,14 +12,16 @@ export interface AudioPlayerOptions {
 
 class AudioPlayer implements AudioPlayerProps {
   private options: AudioPlayerOptions;
-
+  
   constructor(options) {
     this.options = options;
   }
-
-  play(success: () => void, fail: (err: Error) => void): void {}
-
-  destroy(): void {}
+  
+  play(callback: Callback<Error, any, void>): void {
+  }
+  
+  destroy(): void {
+  }
 }
 
 export { AudioPlayer };
