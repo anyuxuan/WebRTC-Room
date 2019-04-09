@@ -2,6 +2,8 @@ import { Client, ClientProps } from '@/WebRTC-SDK/Client';
 import { detectRTC } from '@/WebRTC-SDK/helpers';
 import { Stream, StreamProps, StreamSpec } from '@/WebRTC-SDK/Stream';
 
+import 'webrtc-adapter';
+
 export type Callback<T, U, R> = (err?: T, data?: U) => R;
 
 export interface SDKConfig {
