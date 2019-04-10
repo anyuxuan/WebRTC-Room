@@ -11,3 +11,12 @@ export function setDomAttributes(element: HTMLElement, attributes: DomAttributes
     element.setAttribute(key, value);
   });
 }
+
+export function isDomNode(element: any): boolean {
+  return (
+    element != null &&
+    typeof element === 'object' &&
+    !!element.tagName &&
+    element instanceof HTMLElement
+  );
+}

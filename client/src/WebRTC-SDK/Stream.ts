@@ -16,6 +16,7 @@ export interface StreamProps {
   unmuteVideo(): void;
   muteAudio(): void;
   unmuteAudio(): void;
+  isLocal(): boolean;
 }
 
 export interface StreamSpec {
@@ -78,16 +79,19 @@ class Stream implements StreamProps {
       return;
     }
     this.elementId = elementId;
+    const { streamId } = this.spec;
     if (this.hasVideo()) {
       const options: VideoPlayerOptions = {
+        streamId,
         elementId,
-        stream: this.stream,
+        stream: this,
       };
       this.player = new VideoPlayer(options);
     } else if (this.hasAudio()) {
       const options: AudioPlayerOptions = {
+        streamId,
         elementId,
-        stream: this.stream,
+        stream: this,
       };
       this.player = new AudioPlayer(options);
     }
@@ -123,6 +127,10 @@ class Stream implements StreamProps {
   }
 
   unmuteAudio(): void {
+  }
+
+  isLocal(): boolean {
+    return this.local;
   }
 }
 
