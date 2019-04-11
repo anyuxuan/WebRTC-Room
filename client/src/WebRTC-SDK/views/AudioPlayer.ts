@@ -19,11 +19,11 @@ class AudioPlayer implements AudioPlayerProps {
     this.options = options;
   }
 
-  play(callback: Callback<Error, any, void>): void {
-  }
+  play = (callback: Callback<Error, any, void>): void => {
+  };
 
-  destroy(): void {
-  }
+  destroy = (): void => {
+  };
 }
 
 export { AudioPlayer };

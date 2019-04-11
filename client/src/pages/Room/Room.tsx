@@ -14,25 +14,29 @@ class Room extends React.Component<any, RoomState> {
   state: RoomState = {
     isSupportRTC: true,
   };
-  
+
   componentDidMount() {
     const { WebRTCSDK } = this.props.global;
     this.setState({
       isSupportRTC: WebRTCSDK.detectRTC(),
     });
+    this.props.dispatch({
+      type: 'media/createClient',
+      appId: '123',
+    });
   }
-  
+
   render() {
     const { isSupportRTC } = this.state;
     if (!isSupportRTC) {
-      return <p>Your browser does not support WebRTC</p>;
+      return <p className={styles.notSupport}>Your browser does not support WebRTC</p>;
     }
     return (
       <div className={styles.roomContainer}>
         <Device />
         <div className={styles.videoContainer}>
-          <LocalVideo/>
-          <RemoteVideo/>
+          <LocalVideo />
+          <RemoteVideo />
         </div>
       </div>
     );

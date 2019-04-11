@@ -25,7 +25,7 @@ class VideoPlayer implements VideoPlayerProps {
     this.options = options;
   }
 
-  play(callback: Callback<Error, any, void>): void {
+  play = (callback: Callback<Error, any, void>): void => {
     const { elementId, streamId, stream } = this.options;
     if (elementId) {
       if (isDomNode(elementId)) {
@@ -54,13 +54,19 @@ class VideoPlayer implements VideoPlayerProps {
     if (stream.isLocal()) {
       this.video.volume = 0;
     }
-  }
+    this.container.appendChild(this.div);
+    this.div.appendChild(this.video);
+    this.video.srcObject = stream.getMediaStream();
+    callback(null);
+  };
 
-  destroy(): void {
-  }
+  destroy = (): void => {
+    this.video.pause();
+    this.container.removeChild(this.div);
+  };
 
-  resize(): void {
-  }
+  resize = (): void => {
+  };
 }
 
 export { VideoPlayer };

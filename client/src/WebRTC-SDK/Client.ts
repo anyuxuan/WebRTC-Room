@@ -11,12 +11,12 @@ export interface ClientProps {
 class Client implements ClientProps {
   private config: SDKConfig;
   private appId: string;
-  
+
   constructor(config: SDKConfig) {
     this.config = config;
   }
-  
-  initCore(appId: string, callback: Callback<Error, any, void>): void {
+
+  initCore = (appId: string, callback: Callback<Error, any, void>): void => {
     if (!appId || !isString(appId)) {
       callback(new TypeError(`Param appId is required and must be a string`));
       return;
@@ -26,11 +26,11 @@ class Client implements ClientProps {
       callback(null);
     }
     Logger.info('initCore success');
-  }
-  
-  initRoom(roomParams: RoomParams): RoomProps {
+  };
+
+  initRoom = (roomParams: RoomParams): RoomProps => {
     return new Room(roomParams);
-  }
+  };
 }
 
 export { Client };
