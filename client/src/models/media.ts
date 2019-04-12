@@ -3,6 +3,7 @@ export default {
   state: {
     devices: [],
     client: null,
+    room: null,
   },
   effects: {
     *getDevices(_, { select, put, cps }) {
@@ -17,11 +18,11 @@ export default {
         console.error(err);
       }
     },
-    *createClient({ appId }, { select, put, cps, call }) {
+    *createClient({ appId }, { select, put, cps }) {
       try {
         let client = yield select(state => state.media.client);
-        if (client) return;
         const sdk = yield select(state => state.global.WebRTCSDK);
+        if (client || !sdk) return;
         const spec = {
           codec: 'vp8',
           mode: 'live',
@@ -31,6 +32,20 @@ export default {
         yield put({
           type: 'saveClient',
           client,
+        });
+      } catch (err) {
+        console.error(err);
+      }
+    },
+    *createRoom({ roomParams }, { select, put }) {
+      try {
+        let room = yield select(state => state.media.room);
+        const client = yield select(state => state.media.client);
+        if (room || !client) return;
+        room = client.initRoom(roomParams);
+        yield put({
+          type: 'saveRoom',
+          room,
         });
       } catch (err) {
         console.error(err);
@@ -48,6 +63,12 @@ export default {
       return {
         ...state,
         client,
+      };
+    },
+    saveRoom(state, { room }) {
+      return {
+        ...state,
+        room,
       };
     },
   },

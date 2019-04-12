@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'dva';
-import LocalVideo from '@/pages/Video/LocalVideo';
-import RemoteVideo from '@/pages/Video/RemoteVideo';
+import LocalMedia from '@/pages/Media/LocalMedia';
+import RemoteMedia from '@/pages/Media/RemoteMedia';
 import Device from '@/pages/Device/Device';
 import styles from './Room.scss';
 
@@ -24,6 +24,14 @@ class Room extends React.Component<any, RoomState> {
       type: 'media/createClient',
       appId: '123',
     });
+    this.props.dispatch({
+      type: 'media/createRoom',
+      roomParams: {
+        userId: '111',
+        token: 'abc',
+        roomId: '123abc'
+      },
+    });
   }
 
   render() {
@@ -35,8 +43,8 @@ class Room extends React.Component<any, RoomState> {
       <div className={styles.roomContainer}>
         <Device />
         <div className={styles.videoContainer}>
-          <LocalVideo />
-          <RemoteVideo />
+          <LocalMedia />
+          <RemoteMedia />
         </div>
       </div>
     );

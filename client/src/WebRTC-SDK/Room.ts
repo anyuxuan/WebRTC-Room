@@ -4,7 +4,7 @@ import { Callback } from '@/WebRTC-SDK/WebRTC-SDK';
 
 export interface RoomParams {
   userId: string;
-  sig: string;
+  token: string;
   roomId: string;
 }
 
@@ -18,17 +18,17 @@ export interface RoomProps {
 class Room implements RoomProps {
   private roomParams;
   private isEntered = false;
-  
+
   constructor(params) {
     this.roomParams = params;
   }
-  
+
   enter(roomParams: RoomParams, callback: Callback<Error, string, void>): void {
     if (!roomParams) {
       callback(new TypeError('Param roomParams is required and must be an object'));
       return;
     }
-    const { userId, roomId, sig } = roomParams;
+    const { userId, roomId, token } = roomParams;
     if (!userId || !isString(userId)) {
       callback(new TypeError('Param userId is required and must be a string'));
       return;
@@ -37,7 +37,7 @@ class Room implements RoomProps {
       callback(new TypeError('Param roomId is required and must be a string'));
       return;
     }
-    if (!sig || !isString(sig)) {
+    if (!token || !isString(token)) {
       callback(new TypeError('Param sig is required and must be a string'));
       return;
     }
@@ -45,7 +45,7 @@ class Room implements RoomProps {
     callback(null, userId);
     Logger.info('enterRoom success');
   }
-  
+
   leave(userId: string, callback: Callback<Error, string, void>): void {
     if (!this.isEntered) {
       callback(new Error(`User ${userId} has not entered the room yet`));
@@ -54,14 +54,14 @@ class Room implements RoomProps {
     callback(null, userId);
     Logger.info('leaveRoom success');
   }
-  
+
   publish(stream: any, callback: Callback<Error, any, void>): void {
     if (!isPlainObject(stream)) {
       callback(new TypeError('Param stream is required and must be an object'));
       return;
     }
   }
-  
+
   unpublish(stream: any, callback: Callback<Error, any, void>): void {
     if (!isPlainObject(stream)) {
       callback(new TypeError('Param stream is required and must be an object'));

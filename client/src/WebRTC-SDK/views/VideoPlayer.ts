@@ -45,7 +45,7 @@ class VideoPlayer implements VideoPlayerProps {
     });
     this.video = document.createElement('video');
     setDomAttributes(this.video, {
-      id: `stream${streamId}`,
+      id: `stream_${streamId}`,
       class: `rtc_stream`,
       style: 'width: 100%; height: 100%; position: absolute;',
       autoplay: 'autoplay',

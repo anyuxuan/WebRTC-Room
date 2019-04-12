@@ -21,11 +21,12 @@ export interface StreamProps {
 }
 
 export interface StreamSpec {
-  streamId: string;
-  microphoneId: string;
-  cameraId: string;
-  video: boolean;
-  audio: boolean;
+  streamId?: string;
+  microphoneId?: string;
+  cameraId?: string;
+  video?: boolean;
+  audio?: boolean;
+  local?: boolean;
 }
 
 class Stream implements StreamProps {
@@ -34,7 +35,7 @@ class Stream implements StreamProps {
   private video: boolean;
   private audio: boolean;
   private pc: RTCPeerConnection;
-  private local: boolean = false;
+  private local: boolean;
   private player: VideoPlayerProps | AudioPlayerProps;
   private elementId: string;
   private stream: MediaStream;
@@ -44,6 +45,9 @@ class Stream implements StreamProps {
     this.spec = spec;
     this.video = spec.video;
     this.audio = spec.audio;
+    if (spec.local == null || spec.local === true) {
+      this.local = true;
+    }
   }
 
   init = async (callback: Callback<Error, any, void>): Promise<void> => {
