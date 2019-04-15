@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'dva';
 import DeviceList, { DeviceType } from '@/components/DeviceList/DeviceList';
 import styles from './Device.scss';
-import { Button } from 'antd';
 
 interface DeviceState {
   currentCamera: CurrentDeviceStates;
@@ -87,7 +86,6 @@ class Device extends React.Component<any, DeviceState> {
   };
 
   render() {
-    const { currentCamera, currentMicrophone } = this.state;
     const { media } = this.props;
     return (
       <div className={styles.deviceContainer}>
@@ -104,22 +102,6 @@ class Device extends React.Component<any, DeviceState> {
             onChange={this.onChangeDevice}
             type={DeviceType.MICROPHONE}
           />
-        </div>
-        <div className={styles.deviceControl}>
-          <Button
-            htmlType={'button'}
-            className={styles.button}
-            onClick={currentCamera.isOpen ? this.closeCamera : this.openCamera}
-          >
-            {`${currentCamera.isOpen ? '关闭' : '打开'}摄像头`}
-          </Button>
-          <Button
-            htmlType={'button'}
-            className={styles.button}
-            onClick={currentMicrophone.isOpen ? this.closeMicrophone : this.openMicrophone}
-          >
-            {`${currentMicrophone.isOpen ? '关闭' : '打开'}麦克风`}
-          </Button>
         </div>
       </div>
     );

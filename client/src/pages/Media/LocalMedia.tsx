@@ -1,7 +1,9 @@
 import React from 'react';
 import { connect } from 'dva';
+import { Icon } from 'antd';
 import { StreamProps, StreamSpec } from '@/WebRTC-SDK';
 import styles from './LocalMedia.scss';
+import { initStream } from '@/utils';
 
 interface LocalMediaState {
   localStreams: Map<string, StreamProps>;
@@ -24,38 +26,46 @@ class LocalMedia extends React.Component<any, LocalMediaState> {
   }
 
   componentWillReceiveProps(nextProps: Readonly<any>): void {
-    const { devices } = nextProps.media;
-    if (devices.length) {
-      const cameraList = devices.filter(device => device.kind === 'videoinput');
-      this.openCamera({
-        deviceId: cameraList[0].deviceId,
-      });
-    }
   }
 
-  openCamera = (hardwareInfo: HardwareInfo): void => {
+  openCamera = async (): Promise<void> => {
     const { WebRTCSDK } = this.props.global;
-    const { deviceId } = hardwareInfo;
     const spec: StreamSpec = {
       streamId: 'local',
       video: true,
       audio: false,
-      cameraId: deviceId,
     };
     const stream = WebRTCSDK.createStream(spec);
-    stream.init((err) => {
-      if (err) {
-        console.error(err);
-        return;
-      }
-      stream.play('localVideo', () => {});
-    });
+    await initStream(stream);
+    stream.play('localVideo', () => {});
+  };
+
+  openMicrophone = async (): Promise<void> => {
+
   };
 
   render() {
     return (
       <div id={'localVideo'} className={styles.wrapper}>
-        LocalVideo
+        <div className={styles.tools}>
+          <Icon
+            onClick={() => this.openMicrophone()}
+            style={{ fontSize: 20 }}
+            type="sound"
+            theme="filled"
+          />
+          <Icon
+            onClick={() => this.openCamera()}
+            style={{ fontSize: 20 }}
+            type="camera"
+            theme="filled"
+          />
+          <Icon
+            style={{ fontSize: 20 }}
+            type="setting"
+            theme="filled"
+          />
+        </div>
       </div>
     );
   }
