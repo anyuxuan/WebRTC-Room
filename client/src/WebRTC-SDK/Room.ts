@@ -23,7 +23,7 @@ class Room implements RoomProps {
     this.roomParams = params;
   }
 
-  enter(roomParams: RoomParams, callback: Callback<Error, string, void>): void {
+  enter = (roomParams: RoomParams, callback: Callback<Error, string, void>): void => {
     if (!roomParams) {
       callback(new TypeError('Param roomParams is required and must be an object'));
       return;
@@ -44,30 +44,30 @@ class Room implements RoomProps {
     this.isEntered = true;
     callback(null, userId);
     Logger.info('enterRoom success');
-  }
+  };
 
-  leave(userId: string, callback: Callback<Error, string, void>): void {
+  leave = (userId: string, callback: Callback<Error, string, void>): void => {
     if (!this.isEntered) {
       callback(new Error(`User ${userId} has not entered the room yet`));
       return;
     }
     callback(null, userId);
     Logger.info('leaveRoom success');
-  }
+  };
 
-  publish(stream: any, callback: Callback<Error, any, void>): void {
+  publish = (stream: any, callback: Callback<Error, any, void>): void => {
     if (!isPlainObject(stream)) {
       callback(new TypeError('Param stream is required and must be an object'));
       return;
     }
-  }
+  };
 
-  unpublish(stream: any, callback: Callback<Error, any, void>): void {
+  unpublish = (stream: any, callback: Callback<Error, any, void>): void => {
     if (!isPlainObject(stream)) {
       callback(new TypeError('Param stream is required and must be an object'));
       return;
     }
-  }
+  };
 }
 
 export { Room };

@@ -37,7 +37,7 @@ class LocalMedia extends React.Component<any, LocalMediaState> {
     };
     const stream = WebRTCSDK.createStream(spec);
     await initStream(stream);
-    stream.play('localVideo', () => {});
+    stream.play('localVideo');
   };
 
   openMicrophone = async (): Promise<void> => {
@@ -52,18 +52,18 @@ class LocalMedia extends React.Component<any, LocalMediaState> {
             onClick={() => this.openMicrophone()}
             style={{ fontSize: 20 }}
             type="sound"
-            theme="filled"
+            theme="twoTone"
           />
           <Icon
             onClick={() => this.openCamera()}
             style={{ fontSize: 20 }}
             type="camera"
-            theme="filled"
+            theme="twoTone"
           />
           <Icon
             style={{ fontSize: 20 }}
             type="setting"
-            theme="filled"
+            theme="twoTone"
           />
         </div>
       </div>

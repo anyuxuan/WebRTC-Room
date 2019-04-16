@@ -1,4 +1,4 @@
-import { getElementById, isDomNode, setDomAttributes } from '@/WebRTC-SDK/helpers';
+import { getElementById, isDomNode, setDomAttributes } from '@/WebRTC-SDK/utils';
 import { Callback } from '@/WebRTC-SDK';
 import { Stream } from '@/WebRTC-SDK/Stream';
 import { Logger } from '@/WebRTC-SDK/Logger';

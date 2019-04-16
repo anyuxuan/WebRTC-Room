@@ -3,10 +3,12 @@ import { AudioPlayer, AudioPlayerOptions, AudioPlayerProps } from '@/WebRTC-SDK/
 import { Callback } from '@/WebRTC-SDK/WebRTC-SDK';
 import { getUserMedia } from '@/WebRTC-SDK/helpers';
 import { Logger } from '@/WebRTC-SDK/Logger';
+import { noop } from '@/WebRTC-SDK/utils';
 
 export interface StreamProps {
   init(callback: Callback<Error, any, void>): Promise<void>;
-  play(elementId: string, callback: Callback<Error, any, void>): void;
+  play(elementId: string, callback?: Callback<Error, any, void>): void;
+  stop(): void;
   getAttributes(): void;
   getId(): string;
   hasVideo(): boolean;
@@ -17,6 +19,7 @@ export interface StreamProps {
   muteAudio(): void;
   unmuteAudio(): void;
   isLocal(): boolean;
+  isPlaying(): boolean;
   getMediaStream(): MediaStream;
 }
 
@@ -40,6 +43,9 @@ class Stream implements StreamProps {
   private elementId: string;
   private stream: MediaStream;
   private initialized: boolean;
+  private isShowing: boolean = false;
+  private videoMuted: boolean = false;
+  private audioMuted: boolean = false;
 
   constructor(spec) {
     this.spec = spec;
@@ -52,7 +58,7 @@ class Stream implements StreamProps {
 
   init = async (callback: Callback<Error, any, void>): Promise<void> => {
     if (this.initialized) {
-      callback(new Error('Stream has not been initialized'));
+      callback(new Error('Stream has been initialized'));
       return;
     }
     if (!this.local) {
@@ -79,7 +85,7 @@ class Stream implements StreamProps {
     }
   };
 
-  play = (elementId: string, callback: Callback<Error, any, void>): void => {
+  play = (elementId: string, callback: Callback<Error, any, void> = noop): void => {
     if (!elementId) {
       callback(new TypeError('Param elementId is required and must be a string'));
       return;
@@ -102,13 +108,26 @@ class Stream implements StreamProps {
       this.player = new AudioPlayer(options);
     }
     this.player.play(callback);
+    this.isShowing = true;
   };
 
-  getAttributes = (): void => {
+  stop = (): void => {
+    if (this.isShowing) {
+      if (this.player) {
+        this.player.destroy();
+        this.isShowing = false;
+      }
+    }
   };
+
+  getAttributes = (): void => {};
 
   getId = (): string => {
-    return this.spec.streamId;
+    if (this.local && !this.spec.streamId) {
+      return 'local';
+    } else {
+      return this.spec.streamId;
+    }
   };
 
   hasVideo = (): boolean => {
@@ -124,19 +143,27 @@ class Stream implements StreamProps {
   };
 
   muteVideo = (): void => {
+    this.videoMuted = true;
   };
 
   unmuteVideo = (): void => {
+    this.videoMuted = false;
   };
 
   muteAudio = (): void => {
+    this.audioMuted = true;
   };
 
   unmuteAudio = (): void => {
+    this.audioMuted = false;
   };
 
   isLocal = (): boolean => {
     return this.local;
+  };
+
+  isPlaying = (): boolean => {
+    return this.isShowing;
   };
 
   getMediaStream = (): MediaStream => {
