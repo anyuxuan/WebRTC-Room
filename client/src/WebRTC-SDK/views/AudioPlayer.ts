@@ -16,7 +16,7 @@ export interface AudioPlayerOptions {
 }
 
 class AudioPlayer implements AudioPlayerProps {
-  private options: AudioPlayerOptions;
+  private readonly options: AudioPlayerOptions;
   private audio: HTMLAudioElement;
   private div: HTMLDivElement;
   private container: HTMLElement;

@@ -9,7 +9,7 @@ export interface StreamProps {
   init(callback: Callback<Error, any, void>): Promise<void>;
   play(elementId: string, callback?: Callback<Error, any, void>): void;
   stop(): void;
-  getAttributes(): void;
+  getAttributes(): StreamAttributes;
   getId(): string;
   hasVideo(): boolean;
   hasAudio(): boolean;
@@ -30,6 +30,17 @@ export interface StreamSpec {
   video?: boolean;
   audio?: boolean;
   local?: boolean;
+  attributes?: StreamAttributes;
+}
+
+interface StreamAttributes {
+  minVideoBandWidth: number;
+  maxVideoBandWidth: number;
+}
+
+const enum MediaType {
+  VIDEO = 'video',
+  AUDIO = 'audio'
 }
 
 class Stream implements StreamProps {
@@ -120,7 +131,9 @@ class Stream implements StreamProps {
     }
   };
 
-  getAttributes = (): void => {};
+  getAttributes = (): StreamAttributes => {
+    return this.spec.attributes;
+  };
 
   getId = (): string => {
     if (this.local && !this.spec.streamId) {
@@ -143,11 +156,19 @@ class Stream implements StreamProps {
   };
 
   muteVideo = (): void => {
-    this.videoMuted = true;
+    const isReady = this._isReadyToToggleState(MediaType.VIDEO, true);
+    if (isReady) {
+      this.videoMuted = true;
+      this.stream.getVideoTracks().forEach(track => track.enabled = false);
+    }
   };
 
   unmuteVideo = (): void => {
-    this.videoMuted = false;
+    const isReady = this._isReadyToToggleState(MediaType.VIDEO, false);
+    if (isReady) {
+      this.videoMuted = false;
+      this.stream.getVideoTracks().forEach(track => track.enabled = true);
+    }
   };
 
   muteAudio = (): void => {
@@ -168,6 +189,27 @@ class Stream implements StreamProps {
 
   getMediaStream = (): MediaStream => {
     return this.stream;
+  };
+
+  private _isReadyToToggleState = (type: MediaType, currentState: boolean): boolean => {
+    if (this.initialized && this.stream) {
+      if (type === MediaType.VIDEO) {
+        const tracks = this.stream.getVideoTracks();
+        return (
+          tracks.length &&
+          tracks.every(track => track.enabled === currentState)
+        );
+      }
+      if (type === MediaType.AUDIO) {
+        const tracks = this.stream.getAudioTracks();
+        return (
+          tracks.length &&
+          tracks.every(track => track.enabled === currentState)
+        );
+      }
+    } else {
+      return false;
+    }
   };
 }
 
