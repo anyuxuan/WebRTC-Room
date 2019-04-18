@@ -4,6 +4,8 @@ export default {
     devices: [],
     client: null,
     room: null,
+    localStreams: new Map(),
+    remoteStreams: new Map(),
   },
   effects: {
     *getDevices(_, { select, put, cps }) {
@@ -69,6 +71,18 @@ export default {
       return {
         ...state,
         room,
+      };
+    },
+    saveLocalStreams(state, { userId, stream }) {
+      return {
+        ...state,
+        localStreams: state.localStreams.set(userId, stream),
+      };
+    },
+    saveRemoteStreams(state, { userId, stream }) {
+      return {
+        ...state,
+        remoteStreams: state.remoteStreams.set(userId, stream),
       };
     },
   },

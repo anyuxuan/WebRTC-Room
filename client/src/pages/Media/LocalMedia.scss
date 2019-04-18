@@ -13,10 +13,12 @@
   z-index: 999;
 }
 
-.tools > i + i {
+.tools > img + img {
   margin-left: 10px;
 }
 
-.tools > i {
+.tools > img {
   cursor: pointer;
+  width: 26px;
+  height: 26px;
 }
