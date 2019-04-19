@@ -1,10 +1,13 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Icon } from 'antd';
 import styles from './LocalMedia.scss';
 import { initStream } from '@/utils';
+
 import VIDEO_ON_IMG from '@/assets/video-on.png';
 import VIDEO_OFF_IMG from '@/assets/video-off.png';
+import SOUND_ON_IMG from '@/assets/sound-on.png';
+import SOUND_OFF_IMG from '@/assets/sound-off.png';
+import SETTING_IMG from '@/assets/setting.png';
 
 interface LocalMediaState {
   isCameraOn: boolean;
@@ -34,6 +37,7 @@ class LocalMedia extends React.Component<any, LocalMediaState> {
       streamId: 'local',
       video: true,
       audio: false,
+      mirror: false,
     };
     const stream = WebRTCSDK.createStream(spec);
     await initStream(stream);
@@ -54,22 +58,30 @@ class LocalMedia extends React.Component<any, LocalMediaState> {
   };
 
   openMicrophone = async (): Promise<void> => {
-
+    this.setState({ isMicrophoneOn: true });
   };
 
-  closeMicrophone = async (): Promise<void> => {};
+  closeMicrophone = async (): Promise<void> => {
+    this.setState({ isMicrophoneOn: false });
+  };
 
   render() {
     const { isCameraOn, isMicrophoneOn } = this.state;
     return (
       <div id={'localVideo'} className={styles.wrapper}>
         <div className={styles.tools}>
-          <Icon
-            onClick={() => this.openMicrophone()}
-            style={{ fontSize: 20 }}
-            type="sound"
-            theme="twoTone"
-          />
+          {isMicrophoneOn ?
+            <img
+              onClick={this.closeMicrophone}
+              src={SOUND_ON_IMG}
+              alt="sound-on"
+            /> :
+            <img
+              onClick={this.openMicrophone}
+              src={SOUND_OFF_IMG}
+              alt="sound-off"
+            />
+          }
           {isCameraOn ?
             <img
               onClick={this.closeCamera}
@@ -81,10 +93,9 @@ class LocalMedia extends React.Component<any, LocalMediaState> {
               src={VIDEO_OFF_IMG}
               alt="video-off"
             />}
-          <Icon
-            style={{ fontSize: 20 }}
-            type="setting"
-            theme="twoTone"
+          <img
+            src={SETTING_IMG}
+            alt="setting"
           />
         </div>
       </div>

@@ -11,6 +11,9 @@ export interface StreamProps {
   stop(): void;
   getAttributes(): StreamAttributes;
   getId(): string;
+  getMediaStream(): MediaStream;
+  getVideoTrack(): MediaStreamTrack;
+  getAudioTrack(): MediaStreamTrack;
   hasVideo(): boolean;
   hasAudio(): boolean;
   hasMedia(): boolean;
@@ -20,7 +23,6 @@ export interface StreamProps {
   unmuteAudio(): void;
   isLocal(): boolean;
   isPlaying(): boolean;
-  getMediaStream(): MediaStream;
 }
 
 export interface StreamSpec {
@@ -124,6 +126,9 @@ class Stream implements StreamProps {
 
   stop = (): void => {
     if (this.isShowing) {
+      if (this.stream) {
+        this.stream.getTracks().forEach(track => track.stop());
+      }
       if (this.player) {
         this.player.destroy();
         this.isShowing = false;
@@ -142,6 +147,20 @@ class Stream implements StreamProps {
       return this.spec.streamId;
     }
   };
+
+  getMediaStream = (): MediaStream => {
+    return this.stream;
+  };
+
+  getVideoTrack(): MediaStreamTrack {
+    if (!this.stream) return;
+    return this.stream.getVideoTracks()[0];
+  }
+
+  getAudioTrack(): MediaStreamTrack {
+    if (!this.stream) return;
+    return this.stream.getAudioTracks()[0];
+  }
 
   hasVideo = (): boolean => {
     return !!this.spec.video;
@@ -185,10 +204,6 @@ class Stream implements StreamProps {
 
   isPlaying = (): boolean => {
     return this.isShowing;
-  };
-
-  getMediaStream = (): MediaStream => {
-    return this.stream;
   };
 
   private _isReadyToToggleState = (type: MediaType, currentState: boolean): boolean => {

@@ -1,0 +1,5 @@
+class Signal {
+
+}
+
+export { Signal };
