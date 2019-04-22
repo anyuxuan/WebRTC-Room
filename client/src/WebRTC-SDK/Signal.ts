@@ -1,5 +1,0 @@
-class Signal {
-
-}
-
-export { Signal };
