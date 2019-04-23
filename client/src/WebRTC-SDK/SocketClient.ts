@@ -1,4 +1,5 @@
-import SocketIO from 'socket.io-client';
+import socketIO from 'socket.io-client';
+import EventEmitter from 'wolfy87-eventemitter';
 
 export interface SocketClientProps {
   connect(): void;
@@ -7,26 +8,41 @@ export interface SocketClientProps {
 }
 
 export interface SocketClientOptions {
-  IO?: any;
+  url: string;
+  ioClient?: SocketIOClientStatic;
+  ioOptions?: SocketIOClient.ConnectOpts;
 }
 
-class SocketClient implements SocketClientProps {
-  private options: SocketClientOptions;
-  private io: any;
+const connectionStats = {
+  CONNECTED: Symbol('CONNECTED'),
+  RECONNECTING: Symbol('RECONNECTING'),
+  DISCONNECTED: Symbol('DISCONNECTED'),
+};
 
-  constructor(options: SocketClientOptions = {}) {
-    const { IO = SocketIO } = options;
-    this.io = IO(options);
+class SocketClient extends EventEmitter implements SocketClientProps {
+  private readonly options: SocketClientOptions;
+  private io: SocketIOClient.Socket;
+  private state: Symbol;
+
+  constructor(options: SocketClientOptions) {
+    super();
     this.options = options;
+    this.state = connectionStats.DISCONNECTED;
   }
 
   connect = (): void => {
-
+    const { ioClient = socketIO, url, ioOptions } = this.options;
+    this.io = ioClient(url, ioOptions);
+    this._listenSocketEvents();
   };
 
   disconnect = (): void => {};
 
   reconnect = (): void => {};
+
+  private _listenSocketEvents = (): void => {
+
+  };
 }
 
 export { SocketClient };
