@@ -17,20 +17,19 @@ class Room extends React.Component<any, RoomState> {
 
   componentDidMount() {
     const { WebRTCSDK } = this.props.global;
+    const isSupportRTC = WebRTCSDK.detectRTC();
     this.setState({
-      isSupportRTC: WebRTCSDK.detectRTC(),
+      isSupportRTC,
     });
+    if (!isSupportRTC) {
+      return;
+    }
     this.props.dispatch({
       type: 'media/createClient',
       appId: '123',
     });
     this.props.dispatch({
       type: 'media/createRoom',
-      roomParams: {
-        userId: '111',
-        token: 'abc',
-        roomId: '123abc'
-      },
     });
   }
 

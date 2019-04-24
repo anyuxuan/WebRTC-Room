@@ -39,16 +39,24 @@ export default {
         console.error(err);
       }
     },
-    *createRoom({ roomParams }, { select, put }) {
+    *createRoom(_, { select, put }) {
       try {
         let room = yield select(state => state.media.room);
         const client = yield select(state => state.media.client);
         if (room || !client) return;
-        room = client.initRoom(roomParams);
+        room = client.initRoom();
         yield put({
           type: 'saveRoom',
           room,
         });
+      } catch (err) {
+        console.error(err);
+      }
+    },
+    *enterRoom({ roomParams }, { select, put, cps }) {
+      try {
+        const room = yield select(state => state.media.room);
+        yield cps(room.enter, roomParams);
       } catch (err) {
         console.error(err);
       }

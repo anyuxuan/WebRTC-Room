@@ -1,6 +1,8 @@
+import EventEmitter from 'wolfy87-eventemitter';
 import { isPlainObject, isString } from '@/WebRTC-SDK/utils/value-check';
 import { Logger } from '@/WebRTC-SDK/Logger';
 import { Callback } from '@/WebRTC-SDK/WebRTC-SDK';
+import { SocketClient, SocketClientProps } from '@/WebRTC-SDK/SocketClient';
 
 export interface RoomParams {
   userId: string;
@@ -15,12 +17,13 @@ export interface RoomProps {
   unpublish(stream: any, callback: Callback<Error, any, void>): void;
 }
 
-class Room implements RoomProps {
+class Room extends EventEmitter implements RoomProps {
   private roomParams;
   private isEntered = false;
+  private socket: SocketClientProps;
 
-  constructor(params) {
-    this.roomParams = params;
+  constructor() {
+    super();
   }
 
   enter = (roomParams: RoomParams, callback: Callback<Error, string, void>): void => {
@@ -38,9 +41,11 @@ class Room implements RoomProps {
       return;
     }
     if (!token || !isString(token)) {
-      callback(new TypeError('Param sig is required and must be a string'));
+      callback(new TypeError('Param token is required and must be a string'));
       return;
     }
+    this.roomParams = roomParams;
+    this.socket = new SocketClient({ url: 'localhost:3000' });
     this.isEntered = true;
     callback(null, userId);
     Logger.info('enterRoom success');

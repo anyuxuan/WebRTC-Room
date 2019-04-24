@@ -1,5 +1,6 @@
 import socketIO from 'socket.io-client';
 import EventEmitter from 'wolfy87-eventemitter';
+import { Logger } from '@/WebRTC-SDK/Logger';
 
 export interface SocketClientProps {
   connect(): void;
@@ -41,7 +42,22 @@ class SocketClient extends EventEmitter implements SocketClientProps {
   reconnect = (): void => {};
 
   private _listenSocketEvents = (): void => {
-
+    this.io.on('connect', (data) => {
+      Logger.info('connect', data);
+      this.state = connectionStats.CONNECTED;
+      this.emit('connected');
+    });
+    this.io.on('event', (data) => {
+      Logger.info('event', data);
+    });
+    this.io.on('disconnect', (data) => {
+      Logger.info('disconnect', data);
+      this.state = connectionStats.DISCONNECTED;
+      this.emit('disconnected');
+    });
+    this.io.on('error', (err) => {
+      Logger.error('error', err);
+    });
   };
 }
 

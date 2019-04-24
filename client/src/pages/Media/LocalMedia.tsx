@@ -53,7 +53,7 @@ class LocalMedia extends React.Component<any, LocalMediaState> {
   closeCamera = async (): Promise<void> => {
     const { localStreams } = this.props.media;
     const stream = localStreams.get('123');
-    stream.stop();
+    stream.close();
     this.setState({ isCameraOn: false });
   };
 

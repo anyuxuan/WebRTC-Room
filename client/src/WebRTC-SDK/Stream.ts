@@ -8,6 +8,7 @@ import { noop } from '@/WebRTC-SDK/utils';
 export interface StreamProps {
   init(callback: Callback<Error, any, void>): Promise<void>;
   play(elementId: string, callback?: Callback<Error, any, void>): void;
+  close(): void;
   stop(): void;
   getAttributes(): StreamAttributes;
   getId(): string;
@@ -124,11 +125,17 @@ class Stream implements StreamProps {
     this.isShowing = true;
   };
 
-  stop = (): void => {
+  close = (): void => {
     if (this.isShowing) {
+      this.stop();
       if (this.stream) {
         this.stream.getTracks().forEach(track => track.stop());
       }
+    }
+  };
+
+  stop = (): void => {
+    if (this.isShowing) {
       if (this.player) {
         this.player.destroy();
         this.isShowing = false;
@@ -152,15 +159,15 @@ class Stream implements StreamProps {
     return this.stream;
   };
 
-  getVideoTrack(): MediaStreamTrack {
+  getVideoTrack = (): MediaStreamTrack => {
     if (!this.stream) return;
     return this.stream.getVideoTracks()[0];
-  }
+  };
 
-  getAudioTrack(): MediaStreamTrack {
+  getAudioTrack = (): MediaStreamTrack => {
     if (!this.stream) return;
     return this.stream.getAudioTracks()[0];
-  }
+  };
 
   hasVideo = (): boolean => {
     return !!this.spec.video;

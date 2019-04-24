@@ -1,11 +1,11 @@
 import { Callback, SDKConfig } from '@/WebRTC-SDK/WebRTC-SDK';
 import { isString, isFunction } from '@/WebRTC-SDK/utils/value-check';
 import { Logger } from '@/WebRTC-SDK/Logger';
-import { Room, RoomParams, RoomProps } from '@/WebRTC-SDK/Room';
+import { Room, RoomProps } from '@/WebRTC-SDK/Room';
 
 export interface ClientProps {
   initCore(appId: string, callback: Callback<Error, any, void>): void;
-  initRoom(roomParams: RoomParams): RoomProps;
+  initRoom(): RoomProps;
 }
 
 class Client implements ClientProps {
@@ -28,8 +28,8 @@ class Client implements ClientProps {
     Logger.info('initCore success');
   };
 
-  initRoom = (roomParams: RoomParams): RoomProps => {
-    return new Room(roomParams);
+  initRoom = (): RoomProps => {
+    return new Room();
   };
 }
 
