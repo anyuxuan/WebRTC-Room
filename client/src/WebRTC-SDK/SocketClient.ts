@@ -2,7 +2,7 @@ import socketIO from 'socket.io-client';
 import EventEmitter from 'wolfy87-eventemitter';
 import { Logger } from '@/WebRTC-SDK/Logger';
 
-export interface SocketClientProps {
+export interface SocketClientProps extends EventEmitter {
   connect(): void;
   disconnect(): void;
   reconnect(): void;
@@ -56,7 +56,7 @@ class SocketClient extends EventEmitter implements SocketClientProps {
       this.emit('disconnected');
     });
     this.io.on('error', (err) => {
-      Logger.error('error', err);
+      Logger.error('error: ', err);
     });
   };
 }

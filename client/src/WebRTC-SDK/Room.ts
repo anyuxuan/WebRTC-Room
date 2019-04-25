@@ -45,10 +45,20 @@ class Room extends EventEmitter implements RoomProps {
       return;
     }
     this.roomParams = roomParams;
-    this.socket = new SocketClient({ url: 'localhost:3000' });
-    this.isEntered = true;
-    callback(null, userId);
-    Logger.info('enterRoom success');
+    this.socket = new SocketClient({
+      url: 'localhost:3000',
+      ioOptions: {
+        query: {
+          token,
+        },
+      },
+    });
+    this.socket.connect();
+    this.socket.on('connected', () => {
+      Logger.info('enterRoom success');
+      this.isEntered = true;
+      callback(null, userId);
+    });
   };
 
   leave = (userId: string, callback: Callback<Error, string, void>): void => {

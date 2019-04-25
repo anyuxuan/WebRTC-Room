@@ -31,6 +31,14 @@ class Room extends React.Component<any, RoomState> {
     this.props.dispatch({
       type: 'media/createRoom',
     });
+    this.props.dispatch({
+      type: 'media/enterRoom',
+      roomParams: {
+        token: '123',
+        userId: '123',
+        roomId: '123',
+      },
+    });
   }
 
   render() {
