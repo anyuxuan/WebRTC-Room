@@ -60,16 +60,14 @@ class Stream implements StreamProps {
   private isShowing: boolean = false;
   private videoMuted: boolean = false;
   private audioMuted: boolean = false;
-
+  
   constructor(spec) {
     this.spec = spec;
     this.video = spec.video;
     this.audio = spec.audio;
-    if (spec.local == null || spec.local === true) {
-      this.local = true;
-    }
+    this.local = spec.local == null || spec.local === true;
   }
-
+  
   init = async (callback: Callback<Error, any, void>): Promise<void> => {
     if (this.initialized) {
       callback(new Error('Stream has been initialized'));
@@ -98,7 +96,7 @@ class Stream implements StreamProps {
       return;
     }
   };
-
+  
   play = (elementId: string, callback: Callback<Error, any, void> = noop): void => {
     if (!elementId) {
       callback(new TypeError('Param elementId is required and must be a string'));
@@ -124,7 +122,7 @@ class Stream implements StreamProps {
     this.player.play(callback);
     this.isShowing = true;
   };
-
+  
   close = (): void => {
     if (this.isShowing) {
       this.stop();
@@ -133,7 +131,7 @@ class Stream implements StreamProps {
       }
     }
   };
-
+  
   stop = (): void => {
     if (this.isShowing) {
       if (this.player) {
@@ -142,11 +140,11 @@ class Stream implements StreamProps {
       }
     }
   };
-
+  
   getAttributes = (): StreamAttributes => {
     return this.spec.attributes;
   };
-
+  
   getId = (): string => {
     if (this.local && !this.spec.streamId) {
       return 'local';
@@ -154,33 +152,33 @@ class Stream implements StreamProps {
       return this.spec.streamId;
     }
   };
-
+  
   getMediaStream = (): MediaStream => {
     return this.stream;
   };
-
+  
   getVideoTrack = (): MediaStreamTrack => {
     if (!this.stream) return;
     return this.stream.getVideoTracks()[0];
   };
-
+  
   getAudioTrack = (): MediaStreamTrack => {
     if (!this.stream) return;
     return this.stream.getAudioTracks()[0];
   };
-
+  
   hasVideo = (): boolean => {
     return !!this.spec.video;
   };
-
+  
   hasAudio = (): boolean => {
     return !!this.spec.audio;
   };
-
+  
   hasMedia = (): boolean => {
     return !!this.spec.video || !!this.spec.audio;
   };
-
+  
   muteVideo = (): void => {
     const isReady = this._isReadyToToggleState(MediaType.VIDEO, true);
     if (isReady) {
@@ -188,7 +186,7 @@ class Stream implements StreamProps {
       this.stream.getVideoTracks().forEach(track => track.enabled = false);
     }
   };
-
+  
   unmuteVideo = (): void => {
     const isReady = this._isReadyToToggleState(MediaType.VIDEO, false);
     if (isReady) {
@@ -196,23 +194,31 @@ class Stream implements StreamProps {
       this.stream.getVideoTracks().forEach(track => track.enabled = true);
     }
   };
-
+  
   muteAudio = (): void => {
-    this.audioMuted = true;
+    const isReady = this._isReadyToToggleState(MediaType.AUDIO, true);
+    if (isReady) {
+      this.audioMuted = true;
+      this.stream.getAudioTracks().forEach(track => track.enabled = false);
+    }
   };
-
+  
   unmuteAudio = (): void => {
-    this.audioMuted = false;
+    const isReady = this._isReadyToToggleState(MediaType.AUDIO, false);
+    if (isReady) {
+      this.audioMuted = false;
+      this.stream.getAudioTracks().forEach(track => track.enabled = true);
+    }
   };
-
+  
   isLocal = (): boolean => {
-    return this.local;
+    return !!this.local;
   };
-
+  
   isPlaying = (): boolean => {
-    return this.isShowing;
+    return !!this.isShowing;
   };
-
+  
   private _isReadyToToggleState = (type: MediaType, currentState: boolean): boolean => {
     if (this.initialized && this.stream) {
       if (type === MediaType.VIDEO) {
