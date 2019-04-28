@@ -8,6 +8,10 @@ export default [
         redirect: '/room',
       },
       {
+        path: '/welcome',
+        component: './Welcome/Welcome',
+      },
+      {
         path: '/room',
         component: './Room/Room',
       },

@@ -14,7 +14,7 @@ class Room extends React.Component<any, RoomState> {
   state: RoomState = {
     isSupportRTC: true,
   };
-
+  
   componentDidMount() {
     const { WebRTCSDK } = this.props.global;
     const isSupportRTC = WebRTCSDK.detectRTC();
@@ -40,7 +40,7 @@ class Room extends React.Component<any, RoomState> {
       },
     });
   }
-
+  
   render() {
     const { isSupportRTC } = this.state;
     if (!isSupportRTC) {
@@ -48,10 +48,10 @@ class Room extends React.Component<any, RoomState> {
     }
     return (
       <div className={styles.roomContainer}>
-        <Device />
+        <Device/>
         <div className={styles.videoContainer}>
-          <LocalMedia />
-          <RemoteMedia />
+          <LocalMedia/>
+          <RemoteMedia/>
         </div>
       </div>
     );
