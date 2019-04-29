@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.4.0",
+    "@koa/cors": "^2.2.3",
     "blueimp-md5": "^2.10.0",
     "jsonwebtoken": "^8.5.1",
     "koa": "^2.7.0",

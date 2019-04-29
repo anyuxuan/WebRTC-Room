@@ -6,6 +6,7 @@ import { config } from './config';
 // routes
 import routers from './routes';
 // middleWares
+import cors from '@koa/cors';
 import { success } from './middlewares/success';
 import { fail } from './middlewares/fail';
 
@@ -27,6 +28,7 @@ function ignoreAssets(middleWare) {
 }
 
 app
+  .use(cors())
   .use(success())
   .use(fail())
   .use(koaBody())

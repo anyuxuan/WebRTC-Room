@@ -19,10 +19,9 @@ class Welcome extends React.Component<any, WelcomeState> {
       },
     });
   }
-  
-  componentDidUpdate(prevProps: Readonly<any>, prevState: Readonly<WelcomeState>, snapshot?: any) {
-  }
-  
+
+  componentDidUpdate(prevProps: Readonly<any>, prevState: Readonly<WelcomeState>, snapshot?: any) {}
+
   render() {
     return (
       <div className={styles.welcome}>

@@ -8,11 +8,16 @@ export default {
   effects: {
     *createToken({ payload }, { call, put }) {
       try {
+        const { userName, roomId, appId } = payload;
         const res = yield call(createToken, payload);
-        console.log(res, 'res');
         yield put({
           type: 'saveUser',
-          currentUser: {},
+          currentUser: {
+            userName,
+            roomId,
+            appId,
+            token: res.data.token,
+          },
         });
       } catch (err) {
         console.error(err);

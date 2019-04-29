@@ -1,7 +1,8 @@
 import React from 'react';
 import { connect } from 'dva';
-import styles from './LocalMedia.scss';
 import { initStream } from '@/utils';
+
+import styles from './LocalMedia.scss';
 
 import VIDEO_ON_IMG from '@/assets/video-on.png';
 import VIDEO_OFF_IMG from '@/assets/video-off.png';
@@ -21,13 +22,13 @@ class LocalMedia extends React.Component<any, LocalMediaState> {
     isMicrophoneOn: false,
   };
 
-  componentDidMount(): void {
+  componentDidMount() {
     this.props.dispatch({
       type: 'media/getDevices',
     });
   }
 
-  componentDidUpdate(prevProps: Readonly<any>, prevState: Readonly<LocalMediaState>, snapshot?: any): void {
+  componentDidUpdate(prevProps: Readonly<any>, prevState: Readonly<LocalMediaState>, snapshot?: any) {
 
   }
 

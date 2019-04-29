@@ -23,9 +23,11 @@ const codeMessage: CodeMessage = {
   504: '网关超时',
 };
 
+axios.defaults.baseURL = 'http://localhost:3000';
+
 axios.interceptors.response.use(function (response) {
   if (response.status >= 200 && response.status < 300) {
-    return response;
+    return response.data;
   }
   const errMsg = codeMessage[response.status] || response.statusText;
   notification.error({
