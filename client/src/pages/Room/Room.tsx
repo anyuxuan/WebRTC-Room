@@ -3,6 +3,7 @@ import { connect } from 'dva';
 import LocalMedia from '@/pages/Media/LocalMedia';
 import RemoteMedia from '@/pages/Media/RemoteMedia';
 import Device from '@/pages/Device/Device';
+
 import styles from './Room.scss';
 
 interface RoomState {
@@ -14,7 +15,7 @@ class Room extends React.Component<any, RoomState> {
   state: RoomState = {
     isSupportRTC: true,
   };
-  
+
   componentDidMount() {
     const { WebRTCSDK } = this.props.global;
     const isSupportRTC = WebRTCSDK.detectRTC();
@@ -40,7 +41,7 @@ class Room extends React.Component<any, RoomState> {
       },
     });
   }
-  
+
   render() {
     const { isSupportRTC } = this.state;
     if (!isSupportRTC) {

@@ -6,16 +6,16 @@ export default {
     currentUser: {},
   },
   effects: {
-    *createToken({ payload }, { call, put }) {
+    *createToken({ payload }, { select, call, put }) {
       try {
-        const { userName, roomId, appId } = payload;
-        const res = yield call(createToken, payload);
+        const { userName, roomId } = payload;
+        const appId = yield select(state => state.global.appId);
+        const res = yield call(createToken, { ...payload, appId });
         yield put({
           type: 'saveUser',
           currentUser: {
             userName,
             roomId,
-            appId,
             token: res.data.token,
           },
         });

@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'dva';
 import DeviceList, { DeviceType } from '@/components/DeviceList/DeviceList';
+
 import styles from './Device.scss';
 
 interface DeviceState {
