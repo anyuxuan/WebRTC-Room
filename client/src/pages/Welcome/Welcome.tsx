@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Form, Icon, Input, Button, message } from 'antd';
+import { Form, Icon, Input, Button, message, Row, Col } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 
 import styles from './Welcome.scss';
@@ -42,11 +42,15 @@ class Welcome extends React.Component<any, WelcomeState> {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (err) {
-        message.error('请检查信息填写是否正确');
+        message.error('请检查信息是否填写正确');
         return;
       }
       console.log('表单:', values);
     });
+  };
+
+  generateAppId = () => {
+
   };
 
   render() {
@@ -54,53 +58,64 @@ class Welcome extends React.Component<any, WelcomeState> {
 
     return (
       <div className={styles.welcome}>
-        <Form onSubmit={this.enter}>
-          <Form.Item
-            label={'项目ID'}
-          >
-            {getFieldDecorator('appId', {
-              rules: [{
-                required: true,
-                message: '',
-              }],
-            })(
-              <Input placeholder="appId" />,
-            )}
-          </Form.Item>
-          <Form.Item
-            label={'用户名'}
-          >
-            {getFieldDecorator('userName', {
-              rules: [{
-                required: true,
-                message: '请输入用户名',
-              }],
-            })(
-              <Input placeholder="用户名" />,
-            )}
-          </Form.Item>
-          <Form.Item
-            label={'房间号'}
-          >
-            {getFieldDecorator('roomId', {
-              rules: [{
-                required: true,
-                message: '请输入房间号',
-              }],
-            })(
-              <Input placeholder="房间号" />,
-            )}
-          </Form.Item>
-          <Form.Item>
-            <Button
-              htmlType={'submit'}
-              type={'primary'}
-              disabled={hasErrors(getFieldsError())}
-            >
-              进入房间
-            </Button>
-          </Form.Item>
-        </Form>
+        <Row>
+          <Col span={8} offset={8}>
+            <Form onSubmit={this.enter}>
+              <Form.Item label={'项目Id'}>
+                <Row gutter={24}>
+                  <Col span={18}>
+                    {getFieldDecorator('appId', {
+                      rules: [{
+                        required: true,
+                        message: '',
+                      }],
+                    })(
+                      <Input placeholder="项目Id" />,
+                    )}
+                  </Col>
+                  <Col span={6} className={styles.generateBtn}>
+                    <Button
+                      htmlType={'button'}
+                      type={'primary'}
+                      onClick={this.generateAppId}
+                    >
+                      生成项目Id
+                    </Button>
+                  </Col>
+                </Row>
+              </Form.Item>
+              <Form.Item label={'用户名'}>
+                {getFieldDecorator('userName', {
+                  rules: [{
+                    required: true,
+                    message: '请输入用户名',
+                  }],
+                })(
+                  <Input placeholder="用户名" />,
+                )}
+              </Form.Item>
+              <Form.Item label={'房间号'}>
+                {getFieldDecorator('roomId', {
+                  rules: [{
+                    required: true,
+                    message: '请输入房间号',
+                  }],
+                })(
+                  <Input placeholder="房间号" />,
+                )}
+              </Form.Item>
+              <Form.Item className={styles.submitItem}>
+                <Button
+                  htmlType={'submit'}
+                  type={'primary'}
+                  disabled={hasErrors(getFieldsError())}
+                >
+                  进入房间
+                </Button>
+              </Form.Item>
+            </Form>
+          </Col>
+        </Row>
       </div>
     );
   }
