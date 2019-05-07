@@ -1,12 +1,11 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Form, Icon, Input, Button, message, Row, Col } from 'antd';
+import { Form, Input, Button, message, Row, Col } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 
 import styles from './Welcome.scss';
 
 interface WelcomeState {
-
 }
 
 interface WelcomeFormProps extends FormComponentProps {
@@ -19,12 +18,8 @@ function hasErrors(fieldsError): boolean {
 
 @connect(({ global, user }) => ({ global, user }))
 class Welcome extends React.Component<any, WelcomeState> {
-  componentDidMount() {
-    this.props.dispatch({
-      type: 'global/createAppId',
-      projectName: 'WebRTC',
-    });
-  }
+
+  componentDidMount() {}
 
   componentDidUpdate(prevProps: Readonly<any>, prevState: Readonly<WelcomeState>, snapshot?: any) {
     if (prevProps.global.appId !== this.props.global.appId) {
@@ -49,28 +44,34 @@ class Welcome extends React.Component<any, WelcomeState> {
     });
   };
 
-  generateAppId = () => {
+  onProjectNameChange = (value) => {
+    console.log(value);
+  };
 
+  generateAppId = () => {
+    this.props.dispatch({
+      type: 'global/createAppId',
+      projectName: 'webrtc',
+    });
   };
 
   render() {
     const { getFieldDecorator, getFieldsError } = this.props.form;
+    const { appId } = this.props.global;
 
     return (
       <div className={styles.welcome}>
         <Row>
           <Col span={8} offset={8}>
             <Form onSubmit={this.enter}>
-              <Form.Item label={'项目Id'}>
+              <Form.Item label={'项目名称'}>
                 <Row gutter={24}>
                   <Col span={18}>
-                    {getFieldDecorator('appId', {
-                      rules: [{
-                        required: true,
-                        message: '',
-                      }],
-                    })(
-                      <Input placeholder="项目Id" />,
+                    {getFieldDecorator('projectName', {})(
+                      <Input
+                        placeholder={'项目名称'}
+                        onChange={this.onProjectNameChange}
+                      />,
                     )}
                   </Col>
                   <Col span={6} className={styles.generateBtn}>
@@ -83,6 +84,16 @@ class Welcome extends React.Component<any, WelcomeState> {
                     </Button>
                   </Col>
                 </Row>
+              </Form.Item>
+              <Form.Item label={'项目Id'}>
+                {getFieldDecorator('appId', {
+                  rules: [{
+                    required: true,
+                    message: '请输入项目Id',
+                  }],
+                })(
+                  <Input placeholder={'项目Id'} />,
+                )}
               </Form.Item>
               <Form.Item label={'用户名'}>
                 {getFieldDecorator('userName', {
