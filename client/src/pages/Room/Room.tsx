@@ -10,14 +10,14 @@ interface RoomState {
   isSupportRTC: boolean;
 }
 
-@connect(({ global }) => ({ global }))
+@connect(({ global, user }) => ({ global, user }))
 class Room extends React.Component<any, RoomState> {
   state: RoomState = {
     isSupportRTC: true,
   };
 
   componentDidMount() {
-    const { WebRTCSDK } = this.props.global;
+    const { WebRTCSDK, appId } = this.props.global;
     const isSupportRTC = WebRTCSDK.detectRTC();
     this.setState({
       isSupportRTC,
@@ -25,9 +25,10 @@ class Room extends React.Component<any, RoomState> {
     if (!isSupportRTC) {
       return;
     }
+    const { currentUser } = this.props.user;
     this.props.dispatch({
       type: 'media/createClient',
-      appId: '123',
+      appId,
     });
     this.props.dispatch({
       type: 'media/createRoom',
@@ -35,9 +36,9 @@ class Room extends React.Component<any, RoomState> {
     this.props.dispatch({
       type: 'media/enterRoom',
       roomParams: {
-        token: '123',
+        token: currentUser.token,
         userId: '123',
-        roomId: '123',
+        roomId: currentUser.roomId,
       },
     });
   }
@@ -49,10 +50,10 @@ class Room extends React.Component<any, RoomState> {
     }
     return (
       <div className={styles.roomContainer}>
-        <Device/>
+        <Device />
         <div className={styles.videoContainer}>
-          <LocalMedia/>
-          <RemoteMedia/>
+          <LocalMedia />
+          <RemoteMedia />
         </div>
       </div>
     );

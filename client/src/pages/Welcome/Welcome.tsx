@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'dva';
 import { Form, Input, Button, message, Row, Col } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
+import router from 'umi/router';
 
 import styles from './Welcome.scss';
 
@@ -17,47 +18,46 @@ function hasErrors(fieldsError): boolean {
 }
 
 @connect(({ global, user }) => ({ global, user }))
-class Welcome extends React.Component<any, WelcomeState> {
-
-  componentDidMount() {}
-
-  componentDidUpdate(prevProps: Readonly<any>, prevState: Readonly<WelcomeState>, snapshot?: any) {
-    if (prevProps.global.appId !== this.props.global.appId) {
-      this.props.dispatch({
-        type: 'user/createToken',
-        payload: {
-          userName: 'zhangsan',
-          roomId: '123',
-        },
-      });
-    }
-  }
-
+class Welcome extends React.PureComponent<any, WelcomeState> {
   enter = (e) => {
     e.preventDefault();
-    this.props.form.validateFields((err, values) => {
+    this.props.form.validateFields(async (err, values) => {
       if (err) {
         message.error('请检查信息是否填写正确');
         return;
       }
-      console.log('表单:', values);
+      const { userName, roomId } = values;
+      await this.props.dispatch({
+        type: 'user/createToken',
+        payload: {
+          userName,
+          roomId,
+        },
+      });
+      router.push({
+        pathname: '/room',
+      });
     });
   };
 
-  onProjectNameChange = (value) => {
-    console.log(value);
-  };
-
-  generateAppId = () => {
-    this.props.dispatch({
+  generateAppId = async () => {
+    const projectName = this.props.form.getFieldValue('projectName');
+    if (!projectName) {
+      message.error('项目名称不能为空');
+      return;
+    }
+    await this.props.dispatch({
       type: 'global/createAppId',
-      projectName: 'webrtc',
+      projectName,
+    });
+    const { appId } = this.props.global;
+    this.props.form.setFieldsValue({
+      appId,
     });
   };
 
   render() {
     const { getFieldDecorator, getFieldsError } = this.props.form;
-    const { appId } = this.props.global;
 
     return (
       <div className={styles.welcome}>
@@ -67,11 +67,8 @@ class Welcome extends React.Component<any, WelcomeState> {
               <Form.Item label={'项目名称'}>
                 <Row gutter={24}>
                   <Col span={18}>
-                    {getFieldDecorator('projectName', {})(
-                      <Input
-                        placeholder={'项目名称'}
-                        onChange={this.onProjectNameChange}
-                      />,
+                    {getFieldDecorator('projectName')(
+                      <Input placeholder={'项目名称'} />,
                     )}
                   </Col>
                   <Col span={6} className={styles.generateBtn}>
