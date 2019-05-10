@@ -37,7 +37,7 @@ class Room extends React.Component<any, RoomState> {
       type: 'media/enterRoom',
       roomParams: {
         token: currentUser.token,
-        userId: '123',
+        userId: currentUser.userId,
         roomId: currentUser.roomId,
       },
     });

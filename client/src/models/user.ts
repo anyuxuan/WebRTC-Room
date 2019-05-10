@@ -1,4 +1,4 @@
-import { createToken } from '@/services/auth';
+import { createToken, createUserId } from '@/services/auth';
 
 export default {
   namespace: 'user',
@@ -17,6 +17,21 @@ export default {
             userName,
             roomId,
             token: res.data.token,
+          },
+        });
+      } catch (err) {
+        console.error(err);
+      }
+    },
+    *createUserId({ userName }, { select, call, put }) {
+      try {
+        const currentUser = yield select(state => state.user.currentUser);
+        const res = yield call(createUserId, { userName });
+        yield put({
+          type: 'saveUser',
+          currentUser: {
+            ...currentUser,
+            userId: res.data.userId,
           },
         });
       } catch (err) {

@@ -2,6 +2,7 @@ import koaRouter from 'koa-router';
 import md5 from 'blueimp-md5';
 import jwt from 'jsonwebtoken';
 import { config } from '../config';
+import { generateId } from '../utils';
 
 const router = koaRouter();
 
@@ -41,6 +42,20 @@ router.post('/create_app_id', async (ctx, next) => {
     }
     const appId = md5(projectName);
     ctx.response.success({ appId });
+    await next();
+  } catch (err) {
+    await next(err);
+  }
+});
+
+router.post('/create_user_id', async (ctx, next) => {
+  try {
+    const { userName } = ctx.request.body;
+    if (!userName) {
+      ctx.response.fail(400, 'userName is required');
+      return;
+    }
+    ctx.response.success({ userId: `${generateId()}` });
     await next();
   } catch (err) {
     await next(err);

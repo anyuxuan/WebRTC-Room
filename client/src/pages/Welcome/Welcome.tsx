@@ -34,6 +34,10 @@ class Welcome extends React.PureComponent<any, WelcomeState> {
           roomId,
         },
       });
+      await this.props.dispatch({
+        type: 'user/createUserId',
+        userName,
+      });
       router.push({
         pathname: '/room',
       });
