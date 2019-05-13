@@ -28,15 +28,17 @@ class Welcome extends React.PureComponent<any, WelcomeState> {
       }
       const { userName, roomId } = values;
       await this.props.dispatch({
+        type: 'user/createUserId',
+        userName,
+      });
+      const { currentUser } = this.props.user;
+      await this.props.dispatch({
         type: 'user/createToken',
         payload: {
           userName,
           roomId,
+          userId: currentUser.userId,
         },
-      });
-      await this.props.dispatch({
-        type: 'user/createUserId',
-        userName,
       });
       router.push({
         pathname: '/room',

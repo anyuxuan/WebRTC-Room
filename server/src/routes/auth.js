@@ -8,17 +8,14 @@ const router = koaRouter();
 
 router.post('/create_token', async (ctx, next) => {
   try {
-    const { userName, roomId, appId } = ctx.request.body;
-    if (!userName) {
-      ctx.response.fail(400, 'userName is required');
-      return;
-    }
-    if (!roomId) {
-      ctx.response.fail(400, 'roomId is required');
-      return;
-    }
-    if (!appId) {
-      ctx.response.fail(400, 'appId is required');
+    const errorFields = [];
+    Object.entries(ctx.request.body).forEach(([key, value]) => {
+      if (!value) {
+        errorFields.push(key);
+      }
+    });
+    if (errorFields.length) {
+      ctx.response.fail(400, `\'${errorFields.join('、')}\' is required`);
       return;
     }
     const payload = {

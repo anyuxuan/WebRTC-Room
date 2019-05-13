@@ -23,14 +23,12 @@ export default {
         console.error(err);
       }
     },
-    *createUserId({ userName }, { select, call, put }) {
+    *createUserId({ userName }, { call, put }) {
       try {
-        const currentUser = yield select(state => state.user.currentUser);
         const res = yield call(createUserId, { userName });
         yield put({
           type: 'saveUser',
           currentUser: {
-            ...currentUser,
             userId: res.data.userId,
           },
         });
@@ -43,7 +41,10 @@ export default {
     saveUser(state, { currentUser }) {
       return {
         ...state,
-        currentUser,
+        currentUser: {
+          ...state.currentUser,
+          ...currentUser,
+        },
       };
     },
   },

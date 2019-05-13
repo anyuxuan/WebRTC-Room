@@ -46,7 +46,7 @@ class Room extends EventEmitter implements RoomProps {
     }
     this.roomParams = roomParams;
     this.socket = new SocketClient({
-      url: 'localhost:3000',
+      url: 'localhost:3001',
       ioOptions: {
         query: {
           token,
@@ -66,6 +66,7 @@ class Room extends EventEmitter implements RoomProps {
       callback(new Error(`User ${userId} has not entered the room yet`));
       return;
     }
+    this.socket.disconnect();
     callback(null, userId);
     Logger.info('leaveRoom success');
   };

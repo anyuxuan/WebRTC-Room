@@ -5,7 +5,7 @@ import { isTokenValid } from './helpers/validator';
 function socketStarter(server) {
   const io = socketIO(server);
   let payload = null;
-  
+
   // middleware
   io.use((socket, next) => {
     const { token } = socket.handshake.query;
@@ -16,7 +16,7 @@ function socketStarter(server) {
     }
     return next(new Error(errMsg));
   });
-  
+
   io.on('connection', (socket) => {
     logger.info('A user connected');
     socket.on('disconnect', () => {
@@ -28,10 +28,11 @@ function socketStarter(server) {
     socket.on('error', (err) => {
       logger.info('error: ', err);
     });
-    socket.broadcast.emit('join', {
+    socket.broadcast.emit('new-user-joined', {
       appId: payload.appId,
       userName: payload.userName,
-      roomId: payload.roomId
+      roomId: payload.roomId,
+      userId: payload.userId,
     });
   });
 }

@@ -2,6 +2,7 @@ import { request } from '@/utils/request';
 
 interface CreateTokenParams {
   userName: string;
+  userId: string;
   roomId: string;
   appId: string;
 }

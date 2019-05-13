@@ -45,10 +45,11 @@ class SocketClient extends EventEmitter implements SocketClientProps {
     this.io.on('connect', (data) => {
       Logger.info('connect', data);
       this.state = connectionStats.CONNECTED;
-      this.emit('connected');
+      this.emit('connected', data);
     });
     this.io.on('event', (data) => {
       Logger.info('event', data);
+      this.emit('event', data);
     });
     this.io.on('disconnect', (data) => {
       Logger.info('disconnect', data);
@@ -57,6 +58,11 @@ class SocketClient extends EventEmitter implements SocketClientProps {
     });
     this.io.on('error', (err) => {
       Logger.error('error: ', err);
+      this.emit('error', err);
+    });
+    this.io.on('new-user-joined', (data) => {
+      Logger.info('new-user-joined', data);
+      this.emit('new-user-joined', data);
     });
   };
 }

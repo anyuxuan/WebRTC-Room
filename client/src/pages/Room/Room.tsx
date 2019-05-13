@@ -1,10 +1,12 @@
 import React from 'react';
 import { connect } from 'dva';
+import router from 'umi/router';
 import LocalMedia from '@/pages/Media/LocalMedia';
 import RemoteMedia from '@/pages/Media/RemoteMedia';
 import Device from '@/pages/Device/Device';
 
 import styles from './Room.scss';
+import { isEmpty } from '@/utils';
 
 interface RoomState {
   isSupportRTC: boolean;
@@ -17,7 +19,7 @@ class Room extends React.Component<any, RoomState> {
   };
 
   componentDidMount() {
-    const { WebRTCSDK, appId } = this.props.global;
+    const { WebRTCSDK } = this.props.global;
     const isSupportRTC = WebRTCSDK.detectRTC();
     this.setState({
       isSupportRTC,
@@ -25,15 +27,23 @@ class Room extends React.Component<any, RoomState> {
     if (!isSupportRTC) {
       return;
     }
+    this.join();
+  }
+
+  join = async () => {
     const { currentUser } = this.props.user;
-    this.props.dispatch({
+    const { appId } = this.props.global;
+    if (!appId || isEmpty(currentUser)) {
+      router.replace('/welcome');
+    }
+    await this.props.dispatch({
       type: 'media/createClient',
       appId,
     });
-    this.props.dispatch({
+    await this.props.dispatch({
       type: 'media/createRoom',
     });
-    this.props.dispatch({
+    await this.props.dispatch({
       type: 'media/enterRoom',
       roomParams: {
         token: currentUser.token,
@@ -41,7 +51,7 @@ class Room extends React.Component<any, RoomState> {
         roomId: currentUser.roomId,
       },
     });
-  }
+  };
 
   render() {
     const { isSupportRTC } = this.state;
